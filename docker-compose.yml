@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    container_name: mail_sender
+    volumes:
+      - .:/mail_sender
+    ports:
+      - "8000:8000"
+
+
+  celery:
+      build: .
+      command: celery -A mail_sender worker --loglevel=info --pool=solo
+      depends_on:
+        - redis
+      volumes:
+        - .:/mail_sender
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_server
+    restart: always
+    ports:
+      - "6379:6379"
