@@ -86,5 +86,5 @@ def MailSender(request):
 
 ####################################################
 
-# python 3.6 
+# python 3.6 d
 # abc
