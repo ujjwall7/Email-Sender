@@ -7,3 +7,4 @@ class CompanyAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'email', 'title', 'company']
     list_display_links = ['id', 'name', 'email', 'title', 'company']
 
+admin.site.register(Credentials)

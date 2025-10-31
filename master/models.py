@@ -10,4 +10,12 @@ class Company(models.Model):
     def __str__(self):
         return self.company
 
+class Credentials(models.Model):
+    resume = models.FileField(upload_to='media', max_length=100)
+    subject = models.CharField(max_length=250, null=True)
+    body = models.TextField(null=True)
+
+    def __str__(self):
+        return self.subject
+
 

@@ -49,14 +49,40 @@ def companyView(request):
     return render(request, "company.html")
 
 
+from django.http import HttpResponse
+from io import BytesIO
+import os
+from master.task import *
+
 def MailSender(request):
-    send_mail_task.delay(
-        subject = "Ujjwal sharma",
-        body = "Hello",
-        from_email = settings.EMAIL_HOST_USER,
-        to_email = settings.EMAIL_HOST_USER,
-        is_html = False
-    )
+    hr_emails = list(Company.objects.all().values_list('email',flat=True))
+    # hr_emails = ["sharmaujjwalm0000@gmail.com"]
+    hr_emails.append("sharmaujjwal0921@gmail.com")
+    company = Credentials.objects.all().last()
+
+    pdf_buffer = BytesIO()
+    pdf_buffer.write(b"%PDF-1.4 example PDF content")  # Replace with actual PDF bytes
+
+    subject = company.subject
+    from_email = "sharmaujjwalm0000@gmail.com"
+    body = company.body
+    pdf_filename = "Python 3 years exp"
+
+    with open(company.resume.path, "rb") as f:
+        pdf_bytes = f.read()
+
+    for hr_email in hr_emails:
+        # pdf_buffer.seek(0)  # Reset pointer each iteration
+        send_mail_task.delay(
+            subject=subject,
+            from_email=from_email,
+            to_email=hr_email,
+            body=body,
+            pdf_bytes=pdf_bytes,
+            pdf_filename=pdf_filename,
+            is_html=False
+        )
     return HttpResponse("Email queued for sending!")
 
+####################################################
 
