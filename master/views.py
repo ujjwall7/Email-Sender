@@ -60,3 +60,4 @@ def MailSender(request):
     return HttpResponse("Email queued for sending!")
 
 
+# python 3.6
